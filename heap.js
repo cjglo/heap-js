@@ -1,9 +1,11 @@
-// practing good commenting practices
+// note: Making sure to do good commenting practices
 
 // Constructor for HeapNode, holds its value and its "location" (aka index)
+// getParent and getChild methods return children/prent according to the heap tree (it is impl as array so they return indexes here)
 function HeapNode(value, ind) {
-	this.val = value;
-	this.index = ind;
+
+	this.val = value; 
+	this.index = ind; 
 	this.getParent = function() {
 		return Math.floor(this.index / 2);
 	}
@@ -13,12 +15,38 @@ function HeapNode(value, ind) {
 	this.getRightChild = function() {
 		return this.index * 2 + 1;
 	}
+
 }
 
 // Define all the Heap Tree Functions here:
 removeMin = function() {
 
+	// first we must make sure heap has a value to return (actually has a size)
+	if(this.tree.length <= 1)
+	{
+		// nothing in tree to return
+		return undefined;
 	}
+	else if(this.tree.length === 2)
+	{
+		return this.tree.pop().val; // only one element, so just pop() to empty tree and then return
+	}
+	else if(this.tree.length === 3)// root will only have left child if size is 2, so by default left will be root and no restruct needed
+	{
+		// left is new root, since no other option (leftChild is tree[2], just to remind that tree[0] is a sentinel node)
+		let num = this.tree[1].val; // save value to return
+		this.tree[1].val = this.tree[2].val;
+		this.tree.pop(); // removes left child, since tree will have only root after this method
+		return num; 
+	}
+	else
+	{
+
+		// all else, heap will need a restruture to maintain properties, and so we must removeMin and call bubbleDown
+	}
+
+}
+
 add = function(val) {
 		// adding an object when empty (first spot in array is a 'sentinel node' 
 		// since using the typical array rep of tree)
@@ -56,11 +84,17 @@ bubbleUp = function() {
 
 bubbleDown = function() {
 
+	
+
 } 
 
+
 logThis = function() {
+
 	console.log(this);
+
 }
+
 
 // HEAP STRUCTURE
 const Heap = {
@@ -92,11 +126,12 @@ const Heap = {
 
 Heap.add(1);
 Heap.add(2);
-Heap.add(3);
-Heap.add(4);
-Heap.add(-2);
-Heap.add(-1);
-
+// Heap.add(3);
+// Heap.add(4);
+// Heap.add(-2);
+// Heap.add(-1);
+// console.log(Heap.removeMin());
+console.log(Heap.removeMin());
 
 Heap.test();
 
