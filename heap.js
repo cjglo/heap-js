@@ -41,8 +41,19 @@ removeMin = function() {
 	}
 	else
 	{
-
 		// all else, heap will need a restruture to maintain properties, and so we must removeMin and call bubbleDown
+
+		// first, save the val to return, then move the "last" node to the root, then do bubbleDown
+		let num = this.tree[1].val;
+		this.tree[1].val = this.tree.last.val;
+
+		// technically, we are moving last to the root, so the old last needs to be removed and then last must point to the "new" last
+		// aka the node to its left (or next row up and all the way right if last was 1st on new row) in the tree abstraction
+		this.tree.pop();
+		this.last = this.tree[this.tree.length - 1]; // with pop, the new last should be at end of array, so can assign it like we do in the add method
+
+		buubleDown(1); // passing root index, it is recursive
+		return num;
 	}
 
 }
@@ -82,8 +93,31 @@ bubbleUp = function() {
 		this.last = this.tree[this.tree.length - 1];
 }
 
-bubbleDown = function() {
+bubbleDown = function(index) {
 
+	// note: we enter this having already moved the last node to the root, so its purely "bubbling down"
+	// this is recursive, so first I'll check base case to end call, then call recursive in following blocks
+	if( this.tree[index].val <= this.tree[ this.tree[index].getLeftChild() ].val  &&  this.tree[index].val <= this.tree[ this.tree[index].getRightChild() ].val )
+	{
+		return;
+	}
+	else if( this.tree[ this.tree[index].getLeftChild() ].val <= this.tree[ this.tree[index].getRightChild() ].val )
+	{
+		// since the first if didn't trigger, we know at least one of the children is/are less than the parent
+		// so we will just compare the children and move the lowest, since that will always give us the correct one
+		let temp = this.tree[index].val;
+		this.tree[index].val = this.tree[ this.tree[index].getLeftChild() ].val;
+		this.tree[ this.tree[index].getLeftChild() ].val = temp;
+		bubbleDown( this.tree[index].getLeftChild() ); // swapped values, now need to call of child
+	}
+	else
+	{
+		// see above `else if` for logic, if we are here than the right is smaller than parent and left
+		let temp = this.tree[index].val;
+		this.tree[index].val = this.tree[ this.tree[index].getRightChild() ].val;
+		this.tree[ this.tree[index].getRighttChild() ].val = temp;
+		bubbleDown( this.tree[index].getRightChild() ); // swapped values, now need to call of child
+	}
 	
 
 } 
@@ -126,9 +160,11 @@ const Heap = {
 
 Heap.add(1);
 Heap.add(2);
-// Heap.add(3);
-// Heap.add(4);
-// Heap.add(-2);
+Heap.add(3);
+Heap.add(4);
+Heap.add(0);
+Heap.add(8);
+Heap.add(9);
 // Heap.add(-1);
 // console.log(Heap.removeMin());
 console.log(Heap.removeMin());
