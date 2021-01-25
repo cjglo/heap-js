@@ -29,7 +29,11 @@ removeMin = function() {
 	}
 	else if(this.tree.length === 2)
 	{
-		return this.tree.pop().val; // only one element, so just pop() to empty tree and then return
+		// need to completely empty the tree (including sentinel)
+		let temp = this.tree.pop().val; // only one element, so just pop() to empty tree and then return
+		tree.last = null;
+		this.tree.pop();
+		return temp;
 	}
 	else if(this.tree.length === 3)// root will only have left child if size is 2, so by default left will be root and no restruct needed
 	{
@@ -45,20 +49,22 @@ removeMin = function() {
 
 		// first, save the val to return, then move the "last" node to the root, then do bubbleDown
 		let num = this.tree[1].val;
-		this.tree[1].val = this.tree.last.val;
+		// console.log(last);
+		this.tree[1].val = this.last.val;
 
 		// technically, we are moving last to the root, so the old last needs to be removed and then last must point to the "new" last
 		// aka the node to its left (or next row up and all the way right if last was 1st on new row) in the tree abstraction
 		this.tree.pop();
 		this.last = this.tree[this.tree.length - 1]; // with pop, the new last should be at end of array, so can assign it like we do in the add method
 
-		buubleDown(1); // passing root index, it is recursive
+		this.bubbleDown(1); // passing root index, it is recursive
 		return num;
 	}
 
 }
 
 add = function(val) {
+	
 		// adding an object when empty (first spot in array is a 'sentinel node' 
 		// since using the typical array rep of tree)
 		if(this.tree.length <= 1) {
@@ -96,27 +102,27 @@ bubbleUp = function() {
 bubbleDown = function(index) {
 
 	// note: we enter this having already moved the last node to the root, so its purely "bubbling down"
-	// this is recursive, so first I'll check base case to end call, then call recursive in following blocks
-	if( this.tree[index].val <= this.tree[ this.tree[index].getLeftChild() ].val  &&  this.tree[index].val <= this.tree[ this.tree[index].getRightChild() ].val )
+	// this is recursive, so first I'll check base case to end call, then call recursive in following blocks (that we are at end of array or children are both larger)
+	if( this.tree[index].getLeftChild() >= this.tree.length || (this.tree[index].val <= this.tree[ this.tree[index].getLeftChild() ].val  &&  this.tree[index].val <= this.tree[ this.tree[index].getRightChild() ].val)  )
 	{
 		return;
 	}
-	else if( this.tree[ this.tree[index].getLeftChild() ].val <= this.tree[ this.tree[index].getRightChild() ].val )
+	else if( this.tree[ this.tree[index].getLeftChild() ].val <= this.tree[ this.tree[index].getRightChild() ].val || this.tree[index].getRightChild() >= this.tree.length  )
 	{
 		// since the first if didn't trigger, we know at least one of the children is/are less than the parent
 		// so we will just compare the children and move the lowest, since that will always give us the correct one
 		let temp = this.tree[index].val;
 		this.tree[index].val = this.tree[ this.tree[index].getLeftChild() ].val;
 		this.tree[ this.tree[index].getLeftChild() ].val = temp;
-		bubbleDown( this.tree[index].getLeftChild() ); // swapped values, now need to call of child
+		this.bubbleDown( this.tree[index].getLeftChild() ); // swapped values, now need to call of child
 	}
 	else
 	{
 		// see above `else if` for logic, if we are here than the right is smaller than parent and left
 		let temp = this.tree[index].val;
 		this.tree[index].val = this.tree[ this.tree[index].getRightChild() ].val;
-		this.tree[ this.tree[index].getRighttChild() ].val = temp;
-		bubbleDown( this.tree[index].getRightChild() ); // swapped values, now need to call of child
+		this.tree[ this.tree[index].getRightChild() ].val = temp;
+		this.bubbleDown( this.tree[index].getRightChild() ); // swapped values, now need to call of child
 	}
 	
 
@@ -168,7 +174,13 @@ Heap.add(9);
 // Heap.add(-1);
 // console.log(Heap.removeMin());
 console.log(Heap.removeMin());
+console.log(Heap.removeMin());
+console.log(Heap.removeMin());
+console.log(Heap.removeMin());
+Heap.add(2);
+console.log(Heap.removeMin());
+// Heap.removeMin();
 
-Heap.test();
+// Heap.test();
 
 // Heap.logThis();
