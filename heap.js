@@ -31,7 +31,7 @@ removeMin = function() {
 	{
 		// need to completely empty the tree (including sentinel)
 		let temp = this.tree.pop().val; // only one element, so just pop() to empty tree and then return
-		tree.last = null;
+		this.tree.last = null;
 		this.tree.pop();
 		return temp;
 	}
@@ -107,7 +107,7 @@ bubbleDown = function(index) {
 	{
 		return;
 	}
-	else if( this.tree[ this.tree[index].getLeftChild() ].val <= this.tree[ this.tree[index].getRightChild() ].val || this.tree[index].getRightChild() >= this.tree.length  )
+	else if(  this.tree[index].getRightChild() >= this.tree.length  || this.tree[ this.tree[index].getLeftChild() ].val <= this.tree[ this.tree[index].getRightChild() ].val )
 	{
 		// since the first if didn't trigger, we know at least one of the children is/are less than the parent
 		// so we will just compare the children and move the lowest, since that will always give us the correct one
@@ -178,6 +178,13 @@ console.log(Heap.removeMin());
 console.log(Heap.removeMin());
 console.log(Heap.removeMin());
 Heap.add(2);
+console.log(Heap.removeMin());
+console.log(Heap.removeMin());
+console.log(Heap.removeMin());
+console.log(Heap.removeMin());
+Heap.add(1);
+Heap.add(2);
+console.log(Heap.removeMin());
 console.log(Heap.removeMin());
 // Heap.removeMin();
 
