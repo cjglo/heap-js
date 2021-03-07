@@ -80,9 +80,6 @@ add = function(val) {
 		}
 	}
 
-find = function(value) {
-
-}
 
 bubbleUp = function() {
 		// bubble up the min node until if is at a place that its parent is min or it is at the root
@@ -144,7 +141,6 @@ const Heap = {
 	// methods:
 	removeMin: removeMin, 
 	add: add,
-	find: find,
 	bubbleUp: bubbleUp,
 	bubbleDown: bubbleDown,
 
